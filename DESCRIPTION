@@ -1,0 +1,21 @@
+Type: Compendium
+Package: docker_example
+Title: A simple Example On How To Use Docker With R
+Version: 0.0.1
+Authors@R: c(
+    person(given = "Diego",
+           family = "Barneche",
+           role = c("aut", "cre"),
+           email = "d.barneche@aims.gov.au",
+           comment = c(ORCID = "0000-0002-4568-2362")),
+    person(given = "Murray",
+           family = "Logan", 
+           role = "aut",
+           email = "m.logan@aims.gov.au")
+    )
+Description: This repository contains code needed to reproduce the lesson on how to create a docker container.
+License: MIT + file LICENSE
+Depends: 
+    ggplot2
+Encoding: UTF-8
+LazyData: true

@@ -1,0 +1,17 @@
+# hidden folders
+.git/
+.rstudio/
+kitematic
+
+# hidden files
+**/*.DS_Store
+**/*.Rapp.history
+**/*.Rhistory
+**/*.RData
+**/*.rda
+**/*.rds
+**/*~$*
+
+# files / folders with stuff that are not relevant
+output/
+./*.pdf
