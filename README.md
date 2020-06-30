@@ -205,3 +205,8 @@ adding it will make sure that an RStudio GUI is triggered on the web browser. Al
 commit the change to your README and push it. This last option is more laborious, but most definitely
 ideal if your collaborators only want to have access to your code.
 
+## Acknowledgements
+
+We would like to thank [Dr Daniel Falster](https://danielfalster.com/) for providing us with a
+[great example](https://github.com/dfalster/Westoby_2012_JTB_sapwood_model)
+on how to implement this reproducibility framework.
