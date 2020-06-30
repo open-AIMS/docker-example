@@ -148,7 +148,7 @@ This repository is properly structured following the [NiceRCode guidelines](#org
 You should be able to simply `source("analysis.R")` in the RStudio console, which will generate a
 new output on the newly-created `output` folder.
 
-## This is awesome! How can I share my image container with colleagues?
+## This is awesome! How can I share my container image with colleagues?
 
 This is essentially the last part of our tutorial. You may be happy with building
 your Docker container locally, but you may also want to make it accessible to your
