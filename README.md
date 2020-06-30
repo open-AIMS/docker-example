@@ -207,7 +207,8 @@ ideal if your collaborators only want to have access to your code.
 
 ## Acknowledgements
 
-We would like to thank [Dr Daniel Falster](https://danielfalster.com/) for providing us with a
+We would like to thank Drs [Daniel Falster](https://danielfalster.com/) and
+[Saras Windecker](https://www.smwindecker.com/) for providing us with a
 [great example](https://github.com/dfalster/Westoby_2012_JTB_sapwood_model)
 on how to implement this reproducibility framework. Also, we thank the
 [rocker](https://github.com/rocker-org/rocker-versioned) and [Binder](http://mybinder.org) teams
