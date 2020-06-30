@@ -191,7 +191,7 @@ C) The final option would be for you to generate a [Binder](http://mybinder.org)
 container image remotely hosted on Docker Hub. For that, you need to create a new `Dockerfile`
 in your GitHub repository, and save it in a directory called `.binder`. This new `Dockerfile`
 will point to your Docker Hub image under the FROM tag. You can see an example
-[`.binder/Dockerfile`](https://github.com/dbarneche/docker-example/blob/master/.binder/Dockerfile)
+[`.binder/Dockerfile`](https://github.com/AIMS/docker-example/blob/master/.binder/Dockerfile)
 on our GitHub repo. Once this is done, navigate to http://mybinder.org, and paste the link of your
 GitHub repository. Binder will generate a launcher badge link that you can then add to your gitHub repo's
 `README.md` file, like this
@@ -209,4 +209,6 @@ ideal if your collaborators only want to have access to your code.
 
 We would like to thank [Dr Daniel Falster](https://danielfalster.com/) for providing us with a
 [great example](https://github.com/dfalster/Westoby_2012_JTB_sapwood_model)
-on how to implement this reproducibility framework.
+on how to implement this reproducibility framework. Also, we thank the
+[rocker](https://github.com/rocker-org/rocker-versioned) and [Binder](http://mybinder.org) teams
+for making this much possible.
