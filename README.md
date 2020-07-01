@@ -103,14 +103,14 @@ users, please raise an issue and we will try to expand this tutorial for you as 
 1. We will start by forking a public git repository from GitHub. Make sure you are logged
 into your own GitHub account. Then open the `AIMS/docker-example` repository page on your 
 web browser: https://github.com/AIMS/docker-example. At the top right hand corner, there
-is a option to "Fork" the repository. That will essentially make a full copy of the 
+is an option to "Fork" the repository. That will essentially make a full copy of the 
 `AIMS/docker-example` repository on your own account, allowing you to modify the content as
 much as needed without interfering with the history of the original `AIMS/docker-example`.
 
 2. Now clone the forked repository from GitHub to a local folder of your choice on your
 machine (below referred to as `path_of_your_choice`). The forked repository will be named
 `username/docker-example`, where `username` corresponds to your own GitHub account name.
-Make sure to substitute the appropriate names in the example code below.
+Make sure to substitute the appropriate names in the example code below. On your Terminal:
 
   ```{git clone, engine='bash', results='markdown', eval=FALSE}
   cd path_of_your_choice
@@ -129,20 +129,26 @@ files here are `DESCRIPTION`, `Dockerfile`, and `.dockerignore`. The `DESCRIPTIO
 contains a general description of what this code repository contains, info about
 the authors, the license (see [here](https://help.github.com/en/github/creating-cloning-and-archiving-repositories/licensing-a-repository)
 why you should always include a license with your public repository). It also
-details the packages dependencies needed to to make the code run (in this
+details the packages dependencies needed to make the code run (in this
 example, just [ggplot2](https://ggplot2.tidyverse.org/)).
-The `Dockerfile` contains a set of instructions that Docker uses to create your
-container with the correct specifications. While you do not need to know all
-the bits and pieces here, the two main aspects needed at this stage at the very top
-and very bottom content of this file. The three first rows contain information
-on what version of software you want (we use the [`rocker/verse:3.6.3` container](https://hub.docker.com/r/rocker/verse) freely provided
+The `Dockerfile` contains a set of instructions that Docker uses to build your
+container with the correct specifications. For now you do not need to know all
+the bits and pieces here (though please see [this link](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/)
+for a more in-depth understanding of what the `Dockerfile` is capable of).
+The two main bits for you to understand at this stage are at the very top of this file.
+The three first rows contain information on what version of software you want
+(we use the [`rocker/verse:3.6.3` container](https://hub.docker.com/r/rocker/verse) freely provided
 by the [rocker](https://github.com/rocker-org/rocker-versioned) team), as well as
-information about yourself. The bottom info contains the exact date from which the
-R version and associated packages should be downloaded. In this example, we use an
-[MRAN](http://mran.revolutionanalytics.com/) image which contains version 3.6.3
-and all package versions on the 31/03/2020. The `.dockerignore` plays essentially
-the same role as the `.gitignore` file  on your version control system. It tells
-Docker which files folder should be ignored when building the container.
+information about yourself. The *FROM* command points to rocker, which is in itself
+a container image with all the instructions to install R and its system dependencies
+at a particular version (in this example, 3.6.3). rocker will install the R packages
+listed on the `DESCRIPTION` whose versions will be fetched relative to the [version date]
+(https://github.com/rocker-org/rocker-versioned/blob/master/VERSIONS.md) rocker R 3.6.3 image.
+The `.dockerignore` plays essentially the same role as the `.gitignore` file on your version
+control system. Notice that this example `Dockerfile` has a *COPY* command which tells
+Docker to copy all files/folders from the repository into the container. `.dockerignore`
+then lists which among those should *not* be added to the container. See more on why the
+`.dockerignore` file is important [here](https://docs.docker.com/engine/reference/builder/).
 
 5. Now that we're happy about the basic set up, make sure that Docker is open
 and running on your local machine.

@@ -44,11 +44,10 @@ WORKDIR ${HOME}
 ## Copies your description file into the Docker Container, specifying dependencies
 
 USER root
-COPY ./DESCRIPTION ${HOME}
+# COPY ./DESCRIPTION ${HOME}
 # The above line adds only the description file for the project
 # Uncomment the following line if you want the container to contain your entire repo
-
-#COPY . ${HOME}
+COPY . ${HOME}
 RUN chown -R ${NB_USER} ${HOME}
 
 # Add further custom installations as needed
