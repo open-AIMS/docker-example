@@ -150,28 +150,28 @@ Docker to copy all files/folders from the repository into the container. `.docke
 then lists which among those should *not* be added to the container. See more on why the
 `.dockerignore` file is important [here](https://docs.docker.com/engine/reference/builder/).
 
-5. Now that we're happy about the basic set up, make sure that Docker is open
-and running on your local machine.
+5. Now that we're happy about the basic set up, **make sure that Docker is open
+and running on your local machine.**
 
 6. We're ready to build! Make sure you're on the `docker-example` path, and run
-(this may take several minutes to set up):
+on your Terminal (this may take several minutes to set up):
 
   ```{docker build, engine='bash', results='markdown', eval=FALSE}
   docker build -t docker-example .
   ```
 
 7. Once the container is ready, you can launch it using the following code
-(it will map your current working directory inside the docker container):
+(it will map your current working directory inside the Docker container):
 
   ```{docker run, engine='bash', results='markdown', eval=FALSE}
-  docker run --user root -v $(pwd):/home/rstudio/ -p 8787:8787 -e DISABLE_AUTH=true docker-example .
+  docker run --user root -v $(pwd):/home/rstudio/ -p 8787:8787 -e DISABLE_AUTH=true docker-example
   ```
 
-This line initialises the docker container, and you can physically inspect it and run it on an
+This line initialises the Docker container, and you can physically inspect it and run it on an
 RStudio session via your web browser which points to [localhost:8787](http://localhost:8787).
 
-**NB:** Any changes you make to the code via the browser will automatically change
-the code on the original folder on your machine. If this is not wanted behaviour, you may want
+**NB:** Any changes you make to the code via the browser will also change
+the code locally on your machine. If this is not wanted behaviour, you may want
 to first re-clone your GitHub repo on a new folder in your machine, and then build the container
 image (i.e. step 6 above) from within this new re-cloned local repo to play around via the web
 browser (i.e. step 7 above).
@@ -184,7 +184,7 @@ new output on the newly-created `output` folder.
 
 This is essentially the last part of our tutorial. You may be happy with building
 your Docker container locally, but you may also want to make it accessible to your
-colleagues who are less versed in these tools. You have three options, in increasing
+colleagues who are less versed in these tools. You have three main options, in increasing
 level (not that much) of time investment:
 
 A) One option (harder for colleagues, easier for you) would be for them to also
@@ -194,8 +194,8 @@ unless you give it to them).
 
 B) Another option is to push the container to [Docker Hub](https://hub.docker.com/),
 similar to how one would push code to their repository on GitHub. To do so, first make
-sure you have created an account with Docker Hub, and that they are logged into this
-account locally on their Docker app. To make things easy to remember and consistent,
+sure you have created an account with Docker Hub, and that you are logged into this
+account locally on their Docker app. To make things consistent and easy to remember,
 I would try to have the account name be the same as your GitHub account name. Then,
 simply go back to the Terminal and type:
 
@@ -222,8 +222,8 @@ navigate to the correct folder, then run it:
 C) The final option would be for you to generate a [Binder](http://mybinder.org) link to your
 container remotely hosted on Docker Hub. For that, you need to create a new `Dockerfile`
 in your GitHub repository, and save it in a directory called `.binder`. This new `Dockerfile`
-will point to your Docker Hub image under the FROM tag. You can see an example
-[`.binder/Dockerfile`](https://github.com/AIMS/docker-example/blob/master/.binder/Dockerfile)
+will point to your Docker Hub image via the *FROM* command. You can see an [example
+`.binder/Dockerfile`](https://github.com/AIMS/docker-example/blob/master/.binder/Dockerfile)
 on our GitHub repo. Once this is done, navigate to http://mybinder.org, and paste the link of your
 GitHub repository. Binder will generate a launcher badge link that you can then add to your gitHub repo's
 `README.md` file, like this
