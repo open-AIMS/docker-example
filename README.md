@@ -147,13 +147,14 @@ by the [rocker](https://github.com/rocker-org/rocker-versioned) team), as well a
 information about yourself. The *FROM* command points to rocker, which is in itself
 a container image with all the instructions to install R and its system dependencies
 at a particular version (in this example, 3.6.3). rocker will install the R packages
-listed on the `DESCRIPTION` whose versions will be fetched relative to the [version date]
-(https://github.com/rocker-org/rocker-versioned/blob/master/VERSIONS.md) rocker R 3.6.3 image.
-The `.dockerignore` plays essentially the same role as the `.gitignore` file on your version
-control system. Notice that this example `Dockerfile` has a *COPY* command which tells
-Docker to copy all files/folders from the repository into the container. `.dockerignore`
-then lists which among those should *not* be added to the container. See more on why the
-`.dockerignore` file is important [here](https://docs.docker.com/engine/reference/builder/).
+listed on the `DESCRIPTION` whose versions will be fetched relative to the
+[version date](https://github.com/rocker-org/rocker-versioned/blob/master/VERSIONS.md)
+rocker R 3.6.3 image. The `.dockerignore` plays essentially the same role as the
+`.gitignore` file on your version control system. Notice that this example
+`Dockerfile` has a *COPY* command which tells Docker to copy all files/folders from the
+repository into the container. `.dockerignore` then lists which among those should *not*
+be added to the container. See more on why the `.dockerignore` file is important
+[here](https://docs.docker.com/engine/reference/builder/).
 
 5. Now that we're happy about the basic set up, **make sure that Docker is open
 and running on your local machine.**
