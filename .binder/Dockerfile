@@ -1,6 +1,6 @@
 FROM dbarneche/docker-example
-LABEL maintainer="Diego Barneche"
-LABEL email="d.barneche@aims.gov.au"
+LABEL maintainer="Author"
+LABEL email="author_email@email.com"
 
 # This file copied from
 # https://github.com/rocker-org/binder/blob/master/Dockerfile
@@ -23,9 +23,6 @@ RUN echo "export PATH=${PATH}" >> ${HOME}/.profile
 # without this being explicitly set
 ENV LD_LIBRARY_PATH /usr/local/lib/R/lib
 
-ENV HOME /home/${NB_USER}
-WORKDIR ${HOME}
-
 RUN apt-get update && \
 apt-get -y install python3-venv python3-dev && \
 apt-get purge && \
@@ -47,8 +44,9 @@ RUN R --quiet -e "devtools::install_github('IRkernel/IRkernel')" && \
 R --quiet -e "IRkernel::installspec(prefix='${VENV_DIR}')"
 
 USER root
-COPY . ${HOME}
-RUN chown -R ${NB_USER} ${HOME}
+RUN mkdir /home/project
+COPY . /home/project/
+RUN chown -R ${NB_USER} /home/project/
 USER ${NB_USER}
 
 CMD jupyter notebook --ip 0.0.0.0

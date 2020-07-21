@@ -99,11 +99,13 @@ pillar of our [reproducibility crisis](#the-reproducibility-crisis) section abov
 ## I am hooked! How does it work?
 
 First of all, you need to download and [install Docker](https://docs.docker.com/get-docker/)
-on your machine. This is basically the software that contains all the tricks for you to build 
+on your machine. This is basically the software that contains all the tricks for you to run 
 your own containers. Once you finished installing it, open the software which will
-contain OS-specific examples on how to build Docker containers. For this tutorial, we will
+contain OS-specific examples on how to build Docker images. For this tutorial, we will
 provide a Unix-based example, so it should work on any MacOS or Linux terminal (sorry Windows
 users, please raise an issue and we will try to expand this tutorial for you as well).
+
+### Downloading some code
 
 1. We will start by forking a public git repository from GitHub. Make sure you are logged
 into your own GitHub account. Then open the `AIMS/docker-example` repository page on your 
@@ -128,63 +130,194 @@ Make sure to substitute the appropriate names in the example code below. On your
   cd docker-example
   ```
 
-4. Do not run anything on it just yet. Before we get on to the Docker building
-part, we need to have a look at the file structure in this repository. The key
-files here are `DESCRIPTION`, `Dockerfile`, and `.dockerignore`. The `DESCRIPTION`
+Do not run anything on it just yet. Before we get on to the Docker building
+part, we need to have a look at the file structure in this repository. This
+code repository can be run by sourcing `analysis.R`. In brief, this file loads
+the [ggplot2](https://ggplot2.tidyverse.org/)) package, sources R functions
+from the `R/functions.R` file, reads some data from the `data` folder, and
+generates a plot which is saved automatically to a folder named `output`.
+This code repository is structured following the [NiceRCode guidelines](#organised-project-structure).
+You should be able to simply `source("analysis.R")` in R, and inspect
+the generated output image.
+
+### Building an image
+
+4. We will use the files in this cloned repository to first build an image, and then
+run a container from this image. In terms of ensuring reproducibility, the key
+files are `DESCRIPTION`, `Dockerfile`, and `.dockerignore`. The `DESCRIPTION`
 contains a general description of what this code repository contains, info about
 the authors, the license (see [here](https://help.github.com/en/github/creating-cloning-and-archiving-repositories/licensing-a-repository)
 why you should always include a license with your public repository). It also
 details the packages dependencies needed to make the code run (in this
 example, just [ggplot2](https://ggplot2.tidyverse.org/)).
 The `Dockerfile` contains a set of instructions that Docker uses to build your
-container with the correct specifications. For now you do not need to know all
-the bits and pieces here (though please see [this link](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/)
-for a more in-depth understanding of what the `Dockerfile` is capable of).
-The two main bits for you to understand at this stage are at the very top of this file.
+image with the correct specifications.
 The three first rows contain information on what version of software you want
-(we use the [`rocker/verse:3.6.3` container](https://hub.docker.com/r/rocker/verse) freely provided
+(we use the [`rocker/verse:3.6.3` image](https://hub.docker.com/r/rocker/verse) freely provided
 by the [rocker](https://github.com/rocker-org/rocker-versioned) team), as well as
 information about yourself. The *FROM* command points to rocker, which is in itself
-a container image with all the instructions to install R and its system dependencies
-at a particular version (in this example, 3.6.3). rocker will install the R packages
-listed on the `DESCRIPTION` whose versions will be fetched relative to the
-[version date](https://github.com/rocker-org/rocker-versioned/blob/master/VERSIONS.md)
-rocker R 3.6.3 image. The `.dockerignore` plays essentially the same role as the
-`.gitignore` file on your version control system. Notice that this example
-`Dockerfile` has a *COPY* command which tells Docker to copy all files/folders from the
-repository into the container. `.dockerignore` then lists which among those should *not*
-be added to the container. See more on why the `.dockerignore` file is important
+an image with all the instructions to install R and its system dependencies
+at a particular version (in this example, 3.6.3). The *ARG* command allows for additional
+user-specified arguments that can be passed to Docker on the command line when building the
+image. In this example, we add the argument *WHEN*, which we will use to specify a precise
+date from which to install all R package dependencies listed on the `DESCRIPTION`. The *RUN* command
+contains custom-built instructions that Docker uses while building the image. Here we're merely
+telling it to create a folder `/home/project` on which we will save all the files from this
+code repository. This step is accomplished by the *COPY* command which tells Docker to copy all
+files/folders from the repository to the image. The `Dockerfile` then tells Docker to install
+the packages listed within `DESCRIPTION`, and finally runs the *CMD* command which executes tasks
+when we tell Docker to run a container from the image (see more of this below in step 11).
+Please visit [this link](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/)
+for a more in-depth understanding of what the `Dockerfile` is capable of.
+The `.dockerignore` plays essentially the same role as the
+`.gitignore` file on your version control system; it lists which files in the repository should *not*
+be added to the image. See more on why the `.dockerignore` file is important
 [here](https://docs.docker.com/engine/reference/builder/).
 
 5. Now that we're happy about the basic set up, **make sure that Docker is open
 and running on your local machine.**
 
-6. We're ready to build! Make sure you're on the `docker-example` path, and run
-on your Terminal (this may take several minutes to set up):
+6. We're ready to build the image! Make sure you're on the `docker-example`
+path, and run on your Terminal (this took 8 minutes to run on my iMac):
 
   ```{docker build, engine='bash', results='markdown', eval=FALSE}
-  docker build -t docker-example .
+  docker build --build-arg WHEN=2020-02-29 -t docker-example .
   ```
 
-7. Once the container is ready, you can launch it using the following code
-(it will map your current working directory inside the Docker container):
+The `--build-args` allows us to pass a value to `WHEN` inside the `Dockerfile`.
+The `-t` (short for `--tag`) flag allows you to attribute a name to your image
+(in this case, docker-example). A full list of `build` arguments can be found
+[here](https://docs.docker.com/engine/reference/commandline/build/#options).
+
+### Running a container
+
+7. Although the image was built, no container has been run or
+created from this image yet.
+
+  ```{docker search, engine='bash', results='markdown', eval=FALSE}
+  # lists all existing images, including docker-example
+  docker images -a
+  # lists all existing containers
+  docker ps -a
+  ```
+
+8. If we want to inspect the image and its contents, we need
+to run it, i.e. essentially firing up a container. We can
+inspect the container, but for now we won't do anything.
+Navigate to your machine's home directory first (just to
+prove the point that the image is now independent
+of the code repository from which it was built), then
+run the code below, none line at a time, observing the outputs
 
   ```{docker run, engine='bash', results='markdown', eval=FALSE}
-  docker run --user root -v $(pwd):/home/rstudio/ -p 8787:8787 -e DISABLE_AUTH=true docker-example
+  cd
+  docker run --rm -it --entrypoint=/bin/bash docker-example
+  ls -lG
+  cd home/project
+  ls -lG
+  R
+  library(ggplot2)
+  packageVersion("ggplot2")
   ```
 
-This line initialises the Docker container, and you can physically inspect it and run it on an
-RStudio session via your web browser which points to [localhost:8787](http://localhost:8787).
+9. Notice that the R version is 3.6.3 exactly as we specified (3.6.3), and
+ggplot2 version is 3.2.1, which was the available version on 2020-02-29.
+Now quit R and then the container:
 
-**NB:** Any changes you make to the code via the browser will also change
-the code locally on your machine. If this is not wanted behaviour, you may want
-to first re-clone your GitHub repo on a new folder in your machine, and then build the container
-image (i.e. step 6 above) from within this new re-cloned local repo to play around via the web
-browser (i.e. step 7 above).
+  ```{docker quit, engine='bash', results='markdown', eval=FALSE}
+  q()
+  exit
+  ```
 
-This repository is properly structured following the [NiceRCode guidelines](#organised-project-structure).
-You should be able to simply `source("analysis.R")` in the RStudio console, which will generate a
-new output on the newly-created `output` folder.
+10. By default, Docker saves a version of the container to our local
+machine every time you run the image. This can clutter your disk
+space, and adding the flag `--rm` ensures that this does not
+happen, i.e. the container gets deleted after finishing the image
+run with `exit`. In other words, if you run again
+
+  ```{docker search2, engine='bash', results='markdown', eval=FALSE}
+  docker ps -a
+  ```
+you will see that no containers were saved to your machine.
+A container would have been saved if it were not for the `--rm`
+flag. The `-it --entrypoint=/bin/bash` flag allows *interactive*
+standalone shell access to your container.
+
+11. We can run the container without the interactive mode; Based on
+the `CMD` line of our `Dockerfile`, Docker will navigate to
+`/home/project` and run `Rscript analysis.R`
+
+  ```{docker run2, engine='bash', results='markdown', eval=FALSE}
+  docker run --rm docker-example
+  ```
+
+12. Notice that while it indicates that our plot was produced based
+on the screen output `Saving 7 x 7 in image`, the output is not
+made locally available to us, and the container was deleted given
+the `--rm` flag. You can inspect a new container to check that
+the original image remains unaltered.
+  
+  ```{docker run3, engine='bash', results='markdown', eval=FALSE}
+  docker run --rm -it --entrypoint=/bin/bash docker-example
+  cd home/project
+  ls -lG
+  exit
+  ```
+
+13. So, although the previous step was necessary for learning, it was of
+no use in practical terms. The practical solution is to run a new
+container associated with a local volume, so the output gets saved locally.
+To do that, we need to create a local directory, e.g. `outputdocker`
+which will serve as the volume onto which the `output` folder
+inside the running container gets attached. The volume is indicated with
+the `-v` flag followed by `local_volume:container_directory`.
+
+  ```{docker run4, engine='bash', results='markdown', eval=FALSE}
+  mkdir outputdocker
+  docker run --rm -v ~/outputdocker:/home/project/output docker-example
+  ```
+
+**NB:** With the above code, Docker creates `/home/project/output` automatically,
+so when Docker runs `analysis.R`, R will return a warning message stating
+that the folder `output` already exists because `analysis.R` also tries
+to create a folder `output`; just ignore it.
+
+14. After the above, you should see the `myplot.pdf` also saved
+to your local folder `outputdocker`.
+Alternatively, everything can be run interactively attached to the
+local `outputdocker` volume at once, i.e. combining the above steps.
+open your local files explorer, remove the output file `myplot.pdf`
+and notice the changes as you run this code --- run it, but don't quit
+interactive mode just yet
+
+  ```{docker run5, engine='bash', results='markdown', eval=FALSE}
+  docker run --rm -it --entrypoint=/bin/bash -v ~/outputdocker:/home/project/output docker-example
+  cd home/project
+  Rscript analysis.R
+  ```
+
+15. You should now see the `myplot.pdf` back in `outputdocker`.
+You can keep exploring and running anything you want on the container,
+including producing more code-produced files to `output`, and, by extension,
+`outputdocker`. For instance, remove the `myplot.pdf` from the container
+
+  ```{docker rm, engine='bash', results='markdown', eval=FALSE}
+  rm output/myplot.pdf
+  ```
+
+16. In doing so, it also gets removed from `outputdocker`.
+**NB:** while the container is running you won't be able to delete the `output`
+folder because it is linked to `outputdocker`. Don't forget to exit the container
+
+  ```{docker exit, engine='bash', results='markdown', eval=FALSE}
+  exit
+  ```
+
+You can also have a more advanced customised `Dockerfile` to, for example, run
+a container from an RStudio session via your web browser (see this
+[great](https://github.com/dfalster/Westoby_2012_JTB_sapwood_model) example
+by Drs [Daniel Falster](https://danielfalster.com/) and
+[Saras Windecker](https://www.smwindecker.com/).
 
 ## This is awesome! How can I share my container with colleagues?
 
@@ -194,7 +327,7 @@ colleagues who are less versed in these tools. You have three main options, in i
 level (not that much) of time investment:
 
 A) One option (harder for colleagues, easier for you) would be for them to also
-follow steps 2--7 above (they don't need to fork your GitHub repo as
+follow steps 2--13 above (they don't need to fork your GitHub repo as
 long as they don't try to push back to it -- they won't have the permissions to do so
 unless you give it to them).
 
@@ -213,16 +346,15 @@ simply go back to the Terminal and type:
 remember to replace `username` with your actual Docker Hub account name. You can
 check that the container is now hosted on your [Docker Hub repositories](https://hub.docker.com/repositories).
 Your colleagues can then pull the Docker container locally on their machines, and can
-simply run it (i.e. step 7 in the [above section](#i-am-hooked-how-does-it-work)). That requires them to
-also have a GitHub account and the Docker app installed on their machines. They have
-to clone the GitHub repo first, then pull the Docker container you created,
-navigate to the correct folder, then run it:
+simply run it (i.e. step 13 in the [above section](#i-am-hooked-how-does-it-work)).
+That requires them to also have the Docker app installed on their machines.
+They have to pull the Docker container you created and run it:
 
   ```{docker clonerun, engine='bash', results='markdown', eval=FALSE}
-  git clone https://github.com/username/docker-example.git
+  cd
   docker pull username/docker-example
-  cd docker-example
-  docker run --user root -v $(pwd):/home/rstudio/ -p 8787:8787 -e DISABLE_AUTH=true docker-example .
+  mkdir outputdocker
+  docker run --rm -v ~/outputdocker:/home/project/output username/docker-example
   ```
 
 C) The final option would be for you to generate a [Binder](http://mybinder.org) link to your

@@ -1,29 +1,20 @@
-FROM rocker/verse:3.6.3
-LABEL maintainer="Diego Barneche"
-LABEL email="d.barneche@aims.gov.au"
+FROM rocker/r-ver:3.6.3
+LABEL maintainer="Author"
+LABEL email="author_email@email.com"
 
-# Install major libraries
-RUN    apt-get update \
-    && apt-get install -y --no-install-recommends \
-        zip \
-        unzip
+ARG WHEN
 
-# ---------------------------------------------
+RUN mkdir /home/project
 
-ENV NB_USER rstudio
-ENV NB_UID 1000
+COPY . /home/project/
 
-# And set ENV for R! It doesn't read from the environment...
-RUN echo "PATH=${PATH}" >> /usr/local/lib/R/etc/Renviron
-RUN echo "export PATH=${PATH}" >> ${HOME}/.profile
+# install packages using DESCRIPTION file
+RUN cd /home/project/; \
+  if [ -f DESCRIPTION ]; \
+    then R --quiet -e "options(repos = list(CRAN = 'http://mran.revolutionanalytics.com/snapshot/${WHEN}')); \
+    install.packages('remotes'); \
+    remotes::install_deps()"; \
+  fi
 
-# The `rsession` binary that is called by nbrsessionproxy to start R doesn't seem to start
-# without this being explicitly set
-ENV LD_LIBRARY_PATH /usr/local/lib/R/lib
-
-ENV HOME /home/${NB_USER}
-WORKDIR ${HOME}
-
-USER root
-COPY . ${HOME}
-RUN chown -R ${NB_USER} ${HOME}
+CMD cd /home/project \
+  && Rscript analysis.R
