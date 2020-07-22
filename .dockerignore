@@ -15,3 +15,4 @@ kitematic
 # files / folders with stuff that are not relevant
 output/
 ./*.pdf
+./*tmp*
