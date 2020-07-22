@@ -27,7 +27,7 @@ runs a linear model on some dataset, and produces a .pdf output bivariate plot;
 2) Learn how to build a Docker container from this repository, and run it
 locally;
 
-3) Push this container to Docker Hub;
+3) Push this container to dockerhub;
 
 4) Use Binder to build and run the Docker container remotely, which will be
 done via an interactive RStudio session on your web browser. There you will have access
@@ -333,9 +333,9 @@ follow steps 2--13 above (they don't need to fork your GitHub repo as
 long as they don't try to push back to it -- they won't have the permissions to do so
 unless you give it to them).
 
-B) Another option is to push the container to [Docker Hub](https://hub.docker.com/),
+B) Another option is to push the container to [dockerhub](https://hub.docker.com/),
 similar to how one would push code to their repository on GitHub. To do so, first make
-sure you have created an account with Docker Hub, and that you are logged into this
+sure you have created an account with dockerhub, and that you are logged into this
 account locally on their Docker app. To make things consistent and easy to remember,
 I would try to have the account name be the same as your GitHub account name. Then,
 simply go back to the Terminal and type:
@@ -345,8 +345,8 @@ simply go back to the Terminal and type:
   docker push username/docker-example
   ```
 
-remember to replace `username` with your actual Docker Hub account name. You can
-check that the container is now hosted on your [Docker Hub repositories](https://hub.docker.com/repositories).
+remember to replace `username` with your actual dockerhub account name. You can
+check that the container is now hosted on your [dockerhub repositories](https://hub.docker.com/repositories).
 Your colleagues can then pull the Docker container locally on their machines, and can
 simply run it (i.e. step 13 in the [above section](#i-am-hooked-how-does-it-work)).
 That requires them to also have the Docker app installed on their machines.
@@ -359,10 +359,15 @@ They have to pull the Docker container you created and run it:
   docker run --rm -v ~/outputdocker:/home/rstudio/output username/docker-example
   ```
 
+**NB:** By default, the commands above will push a public repository to dockerhub.
+dockerhub will only provide the user with one private repository. You need to pay
+a fee to have access to multiple private repositories if needed to share containers in
+private.
+
 C) The final option would be for you to generate a [Binder](http://mybinder.org) link to your
-container remotely hosted on Docker Hub. For that, you need to create a new `Dockerfile`
+container remotely hosted on dockerhub. For that, you need to create a new `Dockerfile`
 in your GitHub repository, and save it in a directory called `.binder`. This new `Dockerfile`
-will point to your Docker Hub image via the *FROM* command. You can see an [example
+will point to your dockerhub image via the *FROM* command. You can see an [example
 `.binder/Dockerfile`](https://github.com/AIMS/docker-example/blob/master/.binder/Dockerfile)
 on our GitHub repo, though if attempting this step do not forget to customise the first three lines
 of `.binder/Dockerfile` with your own Docker address, user and email information.
