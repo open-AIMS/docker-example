@@ -155,22 +155,25 @@ image with the correct specifications.
 The three first rows contain information on what version of software you want
 (we use the [`rocker/verse:3.6.3` image](https://hub.docker.com/r/rocker/verse) freely provided
 by the [rocker](https://github.com/rocker-org/rocker-versioned) team), as well as
-information about yourself. The *FROM* command points to rocker, which is in itself
-an image with all the instructions to install R and its system dependencies
-at a particular version (in this example, 3.6.3). The *ARG* command allows for additional
+information about yourself (make sure to populate the fields with your own information
+accordingly). The **FROM** command points to rocker, which is in itself
+an image with all the instructions to install R, RStudio and its system dependencies
+at a particular version (in this example, 3.6.3). The **ARG** command allows for additional
 user-specified arguments that can be passed to Docker on the command line when building the
-image. In this example, we add the argument *WHEN*, which we will use to specify a precise
-date from which to install all R package dependencies listed on the `DESCRIPTION`. The *RUN* command
-contains custom-built instructions that Docker uses while building the image. Here we're merely
-telling it to create a folder `/home/project` on which we will save all the files from this
-code repository. This step is accomplished by the *COPY* command which tells Docker to copy all
-files/folders from the repository to the image. The `Dockerfile` then tells Docker to install
-the packages listed within `DESCRIPTION`, and finally runs the *CMD* command which executes tasks
+image. In this example, we add the argument `WHEN`, which we will use to specify a precise
+date from which to install all R package dependencies listed on the `DESCRIPTION`. This is
+possible by referring to the [MRAN](http://mran.revolutionanalytics.com/snapshot/) repository.
+The **ENV** / **WORKDIR** / **RUN** commands contain custom-built bash instructions that Docker
+uses while building the image. All you need to know at this stage is that we are telling
+Docker to create a folder `/home/rstudio` on which we will save all the files from this
+code repository. This "saving" step is accomplished by the **COPY** command which tells Docker to copy all
+files/folders from the code repository to the image. The `Dockerfile` then tells Docker to install
+the packages listed within `DESCRIPTION`, and finally runs the **CMD** command which executes tasks
 when we tell Docker to run a container from the image (see more of this below in step 11).
 Please visit [this link](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/)
 for a more in-depth understanding of what the `Dockerfile` is capable of.
 The `.dockerignore` plays essentially the same role as the
-`.gitignore` file on your version control system; it lists which files in the repository should *not*
+`.gitignore` file on your version control system; it lists which files in the repository should **not**
 be added to the image. See more on why the `.dockerignore` file is important
 [here](https://docs.docker.com/engine/reference/builder/).
 
@@ -181,7 +184,7 @@ and running on your local machine.**
 path, and run on your Terminal (this took 8 minutes to run on my iMac):
 
   ```{docker build, engine='bash', results='markdown', eval=FALSE}
-  docker build --build-arg WHEN=2020-02-29 -t docker-example .
+  docker build --build-arg WHEN=2020-03-31 -t docker-example .
   ```
 
 The `--build-args` allows us to pass a value to `WHEN` inside the `Dockerfile`.
@@ -213,16 +216,14 @@ run the code below, none line at a time, observing the outputs
   cd
   docker run --rm -it --entrypoint=/bin/bash docker-example
   ls -lG
-  cd home/project
-  ls -lG
   R
   library(ggplot2)
   packageVersion("ggplot2")
   ```
 
 9. Notice that the R version is 3.6.3 exactly as we specified (3.6.3), and
-ggplot2 version is 3.2.1, which was the available version on 2020-02-29.
-Now quit R and then the container:
+ggplot2 version is 3.3.0, which was the available for R version 3.6.3 on
+the specified MRAN date. Now quit R and then the container:
 
   ```{docker quit, engine='bash', results='markdown', eval=FALSE}
   q()
@@ -245,7 +246,7 @@ standalone shell access to your container.
 
 11. We can run the container without the interactive mode; Based on
 the `CMD` line of our `Dockerfile`, Docker will navigate to
-`/home/project` and run `Rscript analysis.R`
+`/home/rstudio` and run `Rscript analysis.R`
 
   ```{docker run2, engine='bash', results='markdown', eval=FALSE}
   docker run --rm docker-example
@@ -255,17 +256,16 @@ the `CMD` line of our `Dockerfile`, Docker will navigate to
 on the screen output `Saving 7 x 7 in image`, the output is not
 made locally available to us, and the container was deleted given
 the `--rm` flag. You can inspect a new container to check that
-the original image remains unaltered.
+the original image remains unaltered (i.e. no `output` folder exists).
   
   ```{docker run3, engine='bash', results='markdown', eval=FALSE}
   docker run --rm -it --entrypoint=/bin/bash docker-example
-  cd home/project
   ls -lG
   exit
   ```
 
 13. So, although the previous step was necessary for learning, it was of
-no use in practical terms. The practical solution is to run a new
+no use to us in practical terms. The practical solution is to run a new
 container associated with a local volume, so the output gets saved locally.
 To do that, we need to create a local directory, e.g. `outputdocker`
 which will serve as the volume onto which the `output` folder
@@ -274,10 +274,10 @@ the `-v` flag followed by `local_volume:container_directory`.
 
   ```{docker run4, engine='bash', results='markdown', eval=FALSE}
   mkdir outputdocker
-  docker run --rm -v ~/outputdocker:/home/project/output docker-example
+  docker run --rm -v ~/outputdocker:/home/rstudio/output docker-example
   ```
 
-**NB:** With the above code, Docker creates `/home/project/output` automatically,
+**NB:** With the above code, Docker creates `/home/rstudio/output` automatically,
 so when Docker runs `analysis.R`, R will return a warning message stating
 that the folder `output` already exists because `analysis.R` also tries
 to create a folder `output`; just ignore it.
@@ -291,8 +291,7 @@ and notice the changes as you run this code --- run it, but don't quit
 interactive mode just yet
 
   ```{docker run5, engine='bash', results='markdown', eval=FALSE}
-  docker run --rm -it --entrypoint=/bin/bash -v ~/outputdocker:/home/project/output docker-example
-  cd home/project
+  docker run --rm -it --entrypoint=/bin/bash -v ~/outputdocker:/home/rstudio/output docker-example
   Rscript analysis.R
   ```
 
@@ -305,7 +304,10 @@ including producing more code-produced files to `output`, and, by extension,
   rm output/myplot.pdf
   ```
 
-16. In doing so, it also gets removed from `outputdocker`.
+In doing so, it also gets removed from `outputdocker`. The other way around
+also works; if you delete `myplot.pdf` from `outputdocker` on your machine,
+it will also be deleted from `/home/rstudio/output` in the container.
+
 **NB:** while the container is running you won't be able to delete the `output`
 folder because it is linked to `outputdocker`. Don't forget to exit the container
 
@@ -354,7 +356,7 @@ They have to pull the Docker container you created and run it:
   cd
   docker pull username/docker-example
   mkdir outputdocker
-  docker run --rm -v ~/outputdocker:/home/project/output username/docker-example
+  docker run --rm -v ~/outputdocker:/home/rstudio/output username/docker-example
   ```
 
 C) The final option would be for you to generate a [Binder](http://mybinder.org) link to your
@@ -362,9 +364,12 @@ container remotely hosted on Docker Hub. For that, you need to create a new `Doc
 in your GitHub repository, and save it in a directory called `.binder`. This new `Dockerfile`
 will point to your Docker Hub image via the *FROM* command. You can see an [example
 `.binder/Dockerfile`](https://github.com/AIMS/docker-example/blob/master/.binder/Dockerfile)
-on our GitHub repo. Once this is done, navigate to http://mybinder.org, and paste the link of your
-GitHub repository. Binder will generate a launcher badge link that you can then add to your gitHub repo's
-`README.md` file, like this
+on our GitHub repo, though if attempting this step do not forget to customise the first three lines
+of `.binder/Dockerfile` with your own Docker address, user and email information.
+Once this is done, navigate to http://mybinder.org, and paste the link of your
+GitHub repository. Binder will generate a launcher badge link that you can then add to your
+GitHub repo's `README.md` file, like this (the link below does not work, it serves just
+for illustration and guidance):
 
   ```{results='markdown', eval=FALSE}
   [![Launch Rstudio Binder](http://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/username/docker-example/master?urlpath=rstudio)
