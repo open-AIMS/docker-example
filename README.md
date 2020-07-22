@@ -380,6 +380,10 @@ adding it will make sure that an RStudio GUI is triggered on the web browser. Al
 commit the change to your README and push it. This last option is more laborious, but most definitely
 ideal if your collaborators only want to have access to your code.
 
+**NB:** Binder is free, amazing, but limited in what it can offer. There's limitation to usage and
+RAM to run a container, so projects that require more system memory to install libraries or run
+analyses may not work. See more detailed info about Binder limitations [here](https://mybinder.readthedocs.io/en/latest/faq.html).
+
 ## Acknowledgements
 
 We would like to thank Drs [Daniel Falster](https://danielfalster.com/) and
