@@ -14,5 +14,6 @@ kitematic
 
 # files / folders with stuff that are not relevant
 output/
+tut_pics/
 ./*.pdf
 ./*tmp*
