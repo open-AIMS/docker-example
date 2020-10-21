@@ -1,10 +1,3 @@
----
-title: ""
-output:
-  html_document: default
-  pdf_document: default
----
-
 [![Ask Me Anything][0a]][0b]
 ![Open Source Love][0c]
 
@@ -30,13 +23,17 @@ output:
 
 But first things first.
 
-## The reproducibility crisis #rpc
+<h2 id="rpc">
+  The reproducibility crisis
+</h2>
 
 One of the biggest challenges scientists face today is making sure that their research is fully reproducible. This reproducibility has three main pillars. It starts with a fully transparent plan of the experimental design and hypothesis to be tested ([see more here](https://osf.io/)), moving onto the actual collection of the data ([see more here][5]), to finally making sure that all analyses and output are fully reproducible from scratch using the collected data and computer code. Here we will address the latter form of reproducibility based exclusively on open-source software and free-of-charge on-line platforms.
 
 [5]: https://en.wikipedia.org/wiki/Reproducibility_Project
 
-## Organised project structure #ops
+<h2 id="ops">
+  Organised project structure
+</h2>
 
 We will assume that you did maintain a record of your original research intention, and that the data is fully collected and, most importantly, **untouched**. Raw data should always be kept as read-only. Literally any modification that is needed to be applied to a dataset can be done via computer code, which helps you keep a fully transparent record of how the data was modified from original version to analysis version used to answer the research question.
 
@@ -59,7 +56,9 @@ An *image* is a static (unchangeable) file that bundles code and all its depende
 
 *Docker* is a containerisation software which allows you to create lightweight, standalone, executable images from which you can create containers to run your code repository and fully reproduce the output. This essentially allows a scientist to isolate their code repository from its environment, solving the third pillar of our [reproducibility crisis](#rpc) section above.
 
-## I am hooked! How does it work? #iah
+<h2 id="iah">
+  I am hooked! How does it work?
+</h2>
 
 First of all, you need to download and [install Docker][6] on your machine. This is basically the software that contains all the tricks for you to run your own containers. Once you finished installing it, open the software which will contain OS-specific examples on how to build Docker images. For this tutorial, we will provide a Unix-based example, so it should work on any MacOS or Linux terminal (sorry Windows users, please raise an issue and we will try to expand this tutorial for you as well).
 
