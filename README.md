@@ -102,6 +102,12 @@ Do not run anything on it just yet. Before we get on to the Docker building part
 
 5. Now that we're happy about the basic set up, **make sure that Docker is open and running on your local machine.**
 
+  ```{cd docker, engine='bash', results='markdown', eval=FALSE}
+  docker --version
+  ```
+
+On my machine (as of 2020-10-21), this returns `Docker version 19.03.13, build 4484c46d9d`.
+
 6. We're ready to build the image! Make sure you're on the `docker-example` path, and run on your Terminal (this took 8--10 minutes to run on my iMac):
 
   ```{docker build, engine='bash', results='markdown', eval=FALSE}
