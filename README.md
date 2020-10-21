@@ -5,11 +5,7 @@
 [0b]: https://github.com/open-AIMS/docker-example/issues/new
 [0c]: https://badges.frapsoft.com/os/v2/open-source.svg?v=103
 
-```html
-<span style="color: #C0392B;">
-  **Warning:** For this tutorial, we will provide a Unix-based example, so it should work on any MacOS or Linux terminal (sorry Windows users, please raise an issue and we will try to expand this tutorial for you as well). I apologise for the inconvenience, and we will try to generalise this tutorial for Windows users as soon as possible.
-</span>
-```
+<h3 style="color:#ff0000">**Warning:** For this tutorial, we will provide a Unix-based example, so it should work on any MacOS or Linux terminal (sorry Windows users, please raise an issue and we will try to expand this tutorial for you as well). I apologise for the inconvenience, and we will try to generalise this tutorial for Windows users as soon as possible.</h3>
 
 # Overview
 
