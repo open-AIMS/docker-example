@@ -91,7 +91,28 @@ Do not run anything on it just yet. Before we get on to the Docker building part
 
 ### Building an image
 
-4. We will use the files in this cloned repository to first build an image, and then run a container from this image. In terms of ensuring reproducibility, the key files are `DESCRIPTION`, `Dockerfile`, and `.dockerignore`. The `DESCRIPTION` contains a general description of what this code repository contains, info about the authors, the license (see [here][9] why you should always include a license with your public repository). It also details the packages dependencies needed to make the code run (in this example, just [ggplot2][8]). The `Dockerfile` contains a set of instructions that Docker uses to build your image with the correct specifications. The three first rows contain information on what version of software you want (we use the [`rocker/verse:3.6.3` image][10] freely provided by the [rocker][11] team), as well as information about yourself (make sure to populate the fields with your own information accordingly). The **FROM** command points to rocker, which is in itself an image with all the instructions to install R, RStudio and its system dependencies at a particular version (in this example, 3.6.3). The **ARG** command allows for additional user-specified arguments that can be passed to Docker on the command line when building the image. In this example, we add the argument `WHEN`, which we will use to specify a precise date from which to install all R package dependencies listed on the `DESCRIPTION`. This is possible by referring to the [MRAN][12] repository. The **ENV** / **WORKDIR** / **RUN** commands contain custom-built bash instructions that Docker uses while building the image. All you need to know at this stage is that we are telling Docker to create a folder `/home/rstudio` on which we will save all the files from this code repository. This "saving" step is accomplished by the **COPY** command which tells Docker to copy all files/folders from the code repository to the image. The `Dockerfile` then tells Docker to install the packages listed within `DESCRIPTION`, and finally runs the **CMD** command which executes tasks when we tell Docker to run a container from the image (see more of this below in step 11). Please visit [this link][13] for a more in-depth understanding of what the `Dockerfile` is capable of. The `.dockerignore` plays essentially the same role as the `.gitignore` file on your version control system; it lists which files in the repository should **not** be added to the image. See more on why the `.dockerignore` file is important [here][14].
+4. We will use the files in this cloned repository to first build an image, and then run a container from this image. In terms of ensuring reproducibility, the key files are `DESCRIPTION`, `Dockerfile`, and `.dockerignore`.
+
+The `DESCRIPTION` contains a general description of what this code repository contains, info about the authors, the license (see [here][9] why you should always include a license with your public repository). It also details the packages dependencies needed to make the code run (in this example, just [ggplot2][8]).
+
+The `Dockerfile` contains a set of instructions that Docker uses to build your image with the correct specifications:
+
+* The three first rows contain information on what version of software you want (we use the [`rocker/verse:3.6.3` image][10] freely provided by the [rocker][11] team), as well as information about yourself (make sure to populate the fields with your own information accordingly).
+
+* The **FROM** command points to rocker, which is in itself an image with all the instructions to install R, RStudio and its system dependencies at a particular version (in this example, 3.6.3).
+
+
+* The **ARG** command allows for additional user-specified arguments that can be passed to Docker on the command line when building the image.
+
+* In this example, we add the argument `WHEN`, which we will use to specify a precise date from which to install all R package dependencies listed on the `DESCRIPTION`. This is possible by referring to the [MRAN][12] repository.
+
+* The **ENV** / **WORKDIR** / **RUN** commands contain custom-built bash instructions that Docker uses while building the image. All you need to know at this stage is that we are telling Docker to create a folder `/home/rstudio` on which we will save all the files from this code repository.
+
+* This "saving" step is accomplished by the **COPY** command which tells Docker to copy all files/folders from the code repository to the image.
+
+* The `Dockerfile` then tells Docker to install the packages listed within `DESCRIPTION`, and finally runs the **CMD** command which executes tasks when we tell Docker to run a container from the image (see more of this below in step 11).
+
+Please visit [this link][13] for a more in-depth understanding of what the `Dockerfile` is capable of. The `.dockerignore` plays essentially the same role as the `.gitignore` file on your version control system; it lists which files in the repository should **not** be added to the image. See more on why the `.dockerignore` file is important [here][14].
 
 [9]: https://help.github.com/en/github/creating-cloning-and-archiving-repositories/licensing-a-repository
 [10]: https://hub.docker.com/r/rocker/verse
