@@ -226,7 +226,7 @@ remember to replace `username` with your actual dockerhub account name. You can 
 
 C) The final option would be for you to generate a [Binder][21] link to your container remotely hosted on dockerhub. For that, you need to create a new `Dockerfile` in your GitHub repository, and save it in a directory called `.binder`. This new `Dockerfile` will point to your dockerhub image via the *FROM* command. You can see an [example `.binder/Dockerfile`][22] on our GitHub repo, though if attempting this step do not forget to customise the first three lines of `.binder/Dockerfile` with your own Docker address, user and email information. Once this is done, navigate to [mybinder.org][21], and paste the link of your GitHub repository:
 
-![][tut_pics/mybinder.png]
+![](tut_pics/mybinder.png)
 
 Binder will generate a launcher badge link that you can then add to your GitHub repo's `README.md` file, like this (the link below does not work, it serves just for illustration and guidance):
 
