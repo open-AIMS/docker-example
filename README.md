@@ -5,6 +5,8 @@
 [0b]: https://github.com/open-AIMS/docker-example/issues/new
 [0c]: https://badges.frapsoft.com/os/v2/open-source.svg?v=103
 
+<span style="color: #C0392B;">**Warning:** For this tutorial, we will provide a Unix-based example, so it should work on any MacOS or Linux terminal (sorry Windows users, please raise an issue and we will try to expand this tutorial for you as well). I apologise for the inconvenience, and we will try to generalise this tutorial for Windows users as soon as possible.</span>
+
 # Overview
 
 **Goal.** The goal of this tutorial is to make sure that you are able to create a container of your code repository in such a way that yourself in the future, or external collaborators, are able to fully reproduce your work. Most importantly, you will do this in such a way that anyone will be able to reproduce the work without having to worry about differences in software versions today, or 100 years from now.
@@ -60,7 +62,7 @@ An *image* is a static (unchangeable) file that bundles code and all its depende
   I am hooked! How does it work?
 </h2>
 
-First of all, you need to download and [install Docker][6] on your machine. This is basically the software that contains all the tricks for you to run your own containers. Once you finished installing it, open the software which will contain OS-specific examples on how to build Docker images. For this tutorial, we will provide a Unix-based example, so it should work on any MacOS or Linux terminal (sorry Windows users, please raise an issue and we will try to expand this tutorial for you as well).
+First of all, you need to download and [install Docker][6] on your machine. This is basically the software that contains all the tricks for you to run your own containers. Once you finished installing it, open the software which will contain OS-specific examples on how to build Docker images.
 
 [6]: https://docs.docker.com/get-docker/
 
