@@ -1,5 +1,5 @@
 [![Ask Me Anything
-\!](https://img.shields.io/badge/Ask%20me-anything-1abc9c.svg)](https://github.com/AIMS/docker-example/issues/new)
+\!](https://img.shields.io/badge/Ask%20me-anything-1abc9c.svg)](https://github.com/open-AIMS/docker-example/issues/new)
 ![Open Source
 Love](https://badges.frapsoft.com/os/v2/open-source.svg?v=103)
 
@@ -108,11 +108,11 @@ users, please raise an issue and we will try to expand this tutorial for you as 
 ### Downloading some code
 
 1. We will start by forking a public git repository from GitHub. Make sure you are logged
-into your own GitHub account. Then open the `AIMS/docker-example` repository page on your 
-web browser: https://github.com/AIMS/docker-example. At the top right hand corner, there
+into your own GitHub account. Then open the `open-AIMS/docker-example` repository page on your 
+web browser: https://github.com/open-AIMS/docker-example. At the top right hand corner, there
 is an option to "Fork" the repository. That will essentially make a full copy of the 
-`AIMS/docker-example` repository on your own account, allowing you to modify the content as
-much as needed without interfering with the history of the original `AIMS/docker-example`.
+`open-AIMS/docker-example` repository on your own account, allowing you to modify the content as
+much as needed without interfering with the history of the original `open-AIMS/docker-example`.
 
 2. Now clone the forked repository from GitHub to a local folder of your choice on your
 machine (below referred to as `path_of_your_choice`). The forked repository will be named
@@ -368,7 +368,7 @@ C) The final option would be for you to generate a [Binder](http://mybinder.org)
 container remotely hosted on dockerhub. For that, you need to create a new `Dockerfile`
 in your GitHub repository, and save it in a directory called `.binder`. This new `Dockerfile`
 will point to your dockerhub image via the *FROM* command. You can see an [example
-`.binder/Dockerfile`](https://github.com/AIMS/docker-example/blob/master/.binder/Dockerfile)
+`.binder/Dockerfile`](https://github.com/open-AIMS/docker-example/blob/master/.binder/Dockerfile)
 on our GitHub repo, though if attempting this step do not forget to customise the first three lines
 of `.binder/Dockerfile` with your own Docker address, user and email information.
 Once this is done, navigate to http://mybinder.org, and paste the link of your
