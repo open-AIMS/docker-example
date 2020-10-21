@@ -1,3 +1,10 @@
+---
+title: ""
+output:
+  html_document: default
+  pdf_document: default
+---
+
 [![Ask Me Anything][0a]][0b]
 ![Open Source Love][0c]
 
